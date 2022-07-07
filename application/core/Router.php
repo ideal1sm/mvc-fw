@@ -2,8 +2,6 @@
 
 namespace application\core;
 
-use mysql_xdevapi\Exception;
-
 class Router
 {
 
@@ -18,16 +16,16 @@ class Router
         }
     }
 
-    public function add($route, $params): void
+    public function add($route, $params) : void
     {
         $route = '#^' . $route . '$#';
         $this->routes[$route] = $params;
     }
 
-    public function match(): bool
+    public function match() : bool
     {
+        $url = trim($_SERVER['REQUEST_URI'], '/');
         foreach ($this->routes as $route => $params) {
-            $url = trim($_SERVER['REQUEST_URI'], '/');
             if (preg_match($route, $url, $matches)) {
                 $this->params = $params;
                 return true;
@@ -36,20 +34,20 @@ class Router
         return false;
     }
 
-    public function run()
+    public function run() : void
     {
         if ($this->match()) {
             $path = 'application\controllers\\' . ucfirst($this->params['controller']) . 'Controller';
             if (class_exists($path)) {
-                $controller = new $path();
                 $action = $this->params['action'] . 'Action';
-                if (method_exists($controller, $action)) {
+                if (method_exists($path, $action)) {
+                    $controller = new $path($this->params);
                     $controller->$action();
                 } else {
                     echo 'Action: ' . '<b>' . $action . '</b>' . ' not found';
                 }
             } else {
-                echo 'Controller: ' . '<b>' . $path . '</b>' . ' not found';
+                echo 'Controller: ' . '<b>' . $path . '</b>' . ' not found!';
             }
         } else {
             echo '404';

@@ -2,11 +2,14 @@
 
 namespace application\controllers;
 
-class AccountController
+use application\core\Controller;
+
+class AccountController extends Controller
 {
     public function loginAction()
     {
         echo 'Login page';
+        dump($this->route);
     }
 
     public function registerAction()
