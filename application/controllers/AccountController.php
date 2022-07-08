@@ -8,12 +8,11 @@ class AccountController extends Controller
 {
     public function loginAction()
     {
-        echo 'Login page';
-        dump($this->route);
+        $this->view->render('Страница авторизации');
     }
 
     public function registerAction()
     {
-        echo 'Register page';
+        $this->view->render('Страница регистрации');
     }
 }

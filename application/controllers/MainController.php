@@ -8,7 +8,11 @@ class MainController extends Controller
 {
     public function indexAction()
     {
-        echo 'Index page';
+        $vars = [
+            'name' => 'Вася',
+            'age' => 88
+        ];
+        $this->view->render('Главная страница', $vars);
     }
 
 }
